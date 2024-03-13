@@ -5,9 +5,24 @@ This project can run tflite-micro on ESP32C3
 ```shell
 git clone git@github.com:huxiangjs/tflite-micro-for-esp32c3.git
 cd tflite-micro-for-esp32c3/
-git submodule update --init --recursive
 idf.py set-target esp32c3
 idf.py menuconfig
 idf.py build
 idf.py flash
 ```
+
+## Steps to generate and build tflm
+Note: Make sure that the following operations are run in a real Linux environment!
+```shell
+cd tflite-micro-for-esp32c3/
+git submodule update --init --recursive
+./generate_tflm.sh
+```
+
+## Build static library
+Note: Make sure that the following operations are run in a real Linux environment!
+```shell
+cd tflm-src/
+make -j4 CROSS_TOOLS_PATH=<your path>
+```
+output: gen/libtflm.a

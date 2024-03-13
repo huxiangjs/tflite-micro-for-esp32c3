@@ -28,9 +28,11 @@ COMMON_FLAGS := \
   -fdata-sections \
   -fmessage-length=0
 
-CXX := clang++
-CC := clang
-AR := ar
+CROSS_TOOLS_PATH :=
+
+CXX := $(CROSS_TOOLS_PATH)riscv32-esp-elf-g++
+CC := $(CROSS_TOOLS_PATH)riscv32-esp-elf-gcc
+AR := $(CROSS_TOOLS_PATH)riscv32-esp-elf-ar
 
 INCLUDES := \
   -I. \
