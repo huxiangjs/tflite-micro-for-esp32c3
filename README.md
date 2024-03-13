@@ -5,6 +5,7 @@ This project can run tflite-micro on ESP32C3
 ```shell
 git clone git@github.com:huxiangjs/tflite-micro-for-esp32c3.git
 cd tflite-micro-for-esp32c3/
+git submodule update --init --recursive
 idf.py set-target esp32c3
 idf.py menuconfig
 idf.py build
