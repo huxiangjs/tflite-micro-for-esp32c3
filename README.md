@@ -1,6 +1,12 @@
 # Tensorflow Lite Micro For ESP32C3
 This project can run tflite-micro on ESP32C3
 
+## ESP-IDF version
+```shell
+idf.py --version
+ESP-IDF v5.2.1-76-gbf17be96b4
+```
+
 ## Build
 ```shell
 git clone git@github.com:huxiangjs/tflite-micro-for-esp32c3.git
@@ -26,3 +32,4 @@ cd tflm-src/
 make -j4 CROSS_TOOLS_PATH=<your path>
 ```
 output: gen/libtflm.a
+

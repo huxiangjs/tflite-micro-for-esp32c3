@@ -26,7 +26,9 @@ COMMON_FLAGS := \
   -fno-unwind-tables \
   -ffunction-sections \
   -fdata-sections \
-  -fmessage-length=0
+  -fmessage-length=0 \
+  -march=rv32imc \
+  -Ofast
 
 CROSS_TOOLS_PATH :=
 
