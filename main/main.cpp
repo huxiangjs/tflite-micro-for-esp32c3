@@ -242,64 +242,64 @@ TfLiteStatus TestAudioSample(const char* label, const int16_t* audio_data,
 
 }  // namespace
 
-TF_LITE_MICRO_TESTS_BEGIN
+static int do_test(void)
+{
+    TF_LITE_MICRO_TEST(NoFeatureTest) {
+      int8_t expected_feature[kFeatureSize] = {
+          126, 103, 124, 102, 124, 102, 123, 100, 118, 97, 118, 100, 118, 98,
+          121, 100, 121, 98,  117, 91,  96,  74,  54,  87, 100, 87,  109, 92,
+          91,  80,  64,  55,  83,  74,  74,  78,  114, 95, 101, 81,
+      };
 
-TF_LITE_MICRO_TEST(NoFeatureTest) {
-  int8_t expected_feature[kFeatureSize] = {
-      126, 103, 124, 102, 124, 102, 123, 100, 118, 97, 118, 100, 118, 98,
-      121, 100, 121, 98,  117, 91,  96,  74,  54,  87, 100, 87,  109, 92,
-      91,  80,  64,  55,  83,  74,  74,  78,  114, 95, 101, 81,
-  };
+      TF_LITE_ENSURE_STATUS(GenerateFeatures(
+          g_no_30ms_audio_data, g_no_30ms_audio_data_size, &g_features));
+      for (size_t i = 0; i < kFeatureSize; i++) {
+        TF_LITE_MICRO_EXPECT_EQ(g_features[0][i], expected_feature[i]);
+        TF_LITE_MICRO_CHECK_FAIL();
+      }
+    }
 
-  TF_LITE_ENSURE_STATUS(GenerateFeatures(
-      g_no_30ms_audio_data, g_no_30ms_audio_data_size, &g_features));
-  for (size_t i = 0; i < kFeatureSize; i++) {
-    TF_LITE_MICRO_EXPECT_EQ(g_features[0][i], expected_feature[i]);
-    TF_LITE_MICRO_CHECK_FAIL();
-  }
+    TF_LITE_MICRO_TEST(YesFeatureTest) {
+      int8_t expected_feature[kFeatureSize] = {
+          124, 105, 126, 103, 125, 101, 123, 100, 116, 98,  115, 97,  113, 90,
+          91,  82,  104, 96,  117, 97,  121, 103, 126, 101, 125, 104, 126, 104,
+          125, 101, 116, 90,  81,  74,  80,  71,  83,  76,  82,  71,
+      };
+
+      TF_LITE_ENSURE_STATUS(GenerateFeatures(
+          g_yes_30ms_audio_data, g_yes_30ms_audio_data_size, &g_features));
+      for (size_t i = 0; i < kFeatureSize; i++) {
+        TF_LITE_MICRO_EXPECT_EQ(g_features[0][i], expected_feature[i]);
+        TF_LITE_MICRO_CHECK_FAIL();
+      }
+    }
+
+    TF_LITE_MICRO_TEST(NoTest) {
+      TestAudioSample("no", g_no_1000ms_audio_data, g_no_1000ms_audio_data_size);
+    }
+
+    TF_LITE_MICRO_TEST(YesTest) {
+      TestAudioSample("yes", g_yes_1000ms_audio_data, g_yes_1000ms_audio_data_size);
+    }
+
+    TF_LITE_MICRO_TEST(SilenceTest) {
+      TestAudioSample("silence", g_silence_1000ms_audio_data,
+                      g_silence_1000ms_audio_data_size);
+    }
+
+    TF_LITE_MICRO_TEST(NoiseTest) {
+      TestAudioSample("silence", g_noise_1000ms_audio_data,
+                      g_noise_1000ms_audio_data_size);
+    }
+
+    return 0;
 }
-
-TF_LITE_MICRO_TEST(YesFeatureTest) {
-  int8_t expected_feature[kFeatureSize] = {
-      124, 105, 126, 103, 125, 101, 123, 100, 116, 98,  115, 97,  113, 90,
-      91,  82,  104, 96,  117, 97,  121, 103, 126, 101, 125, 104, 126, 104,
-      125, 101, 116, 90,  81,  74,  80,  71,  83,  76,  82,  71,
-  };
-
-  TF_LITE_ENSURE_STATUS(GenerateFeatures(
-      g_yes_30ms_audio_data, g_yes_30ms_audio_data_size, &g_features));
-  for (size_t i = 0; i < kFeatureSize; i++) {
-    TF_LITE_MICRO_EXPECT_EQ(g_features[0][i], expected_feature[i]);
-    TF_LITE_MICRO_CHECK_FAIL();
-  }
-}
-
-TF_LITE_MICRO_TEST(NoTest) {
-  TestAudioSample("no", g_no_1000ms_audio_data, g_no_1000ms_audio_data_size);
-}
-
-TF_LITE_MICRO_TEST(YesTest) {
-  TestAudioSample("yes", g_yes_1000ms_audio_data, g_yes_1000ms_audio_data_size);
-}
-
-TF_LITE_MICRO_TEST(SilenceTest) {
-  TestAudioSample("silence", g_silence_1000ms_audio_data,
-                  g_silence_1000ms_audio_data_size);
-}
-
-TF_LITE_MICRO_TEST(NoiseTest) {
-  TestAudioSample("silence", g_noise_1000ms_audio_data,
-                  g_noise_1000ms_audio_data_size);
-}
-
-TF_LITE_MICRO_TESTS_END
-
 
 static void main_task(void *arg)
 {
     ESP_LOGI(TAG, "Main Task Runing");
     while (1) {
-        do_main(0, NULL);
+        do_test();
 
         int size = esp_get_free_heap_size();
         ESP_LOGI(TAG, "Free heap size: %dbyte\n\n", size);
@@ -319,4 +319,3 @@ extern "C" void app_main(void)
 
     ESP_LOGI(TAG, "Test end.");
 }
-

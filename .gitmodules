@@ -1,0 +1,3 @@
+[submodule "components/tflm"]
+	path = components/tflm
+	url = https://github.com/huxiangjs/tflite-micro-components-for-esp32c3.git
