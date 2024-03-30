@@ -23,7 +23,7 @@ idf.py flash
 cd <your project>
 mkdir -p components
 cd components
-git clone --recursive https://github.com/huxiangjs/tflite-micro-components-for-esp32c3.git tfml
+git clone --recursive https://github.com/huxiangjs/tflite-micro-components-for-esp32c3.git tflm
 ```
 
 ## The impact of static libraries compiled by different compilers on speed
